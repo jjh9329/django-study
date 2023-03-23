@@ -6,5 +6,9 @@ from . import views
 
 urlpatterns = [
     path('' , views.index),
-    
+    path('read/<int:id>/',views.read),
+    path('write/',views.write),
+    path('update/<int:id>/',views.update),
+    path('delete/<int:id>/',views.delete),
+    path('search_order/',views.search_order),
 ]

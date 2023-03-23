@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>오더</h1>
+    <table border="1">
+      <th>id</th>
+      <th>주문 날짜</th>
+      <th>주문내용</th>
+      <th>상품값</th>
+      <th>주소</th>
+      <!-- 리스트 내용 반복 -->
+      {% for order in order_list%}
+      <tr>
+        <td>{{ order.id }}</td>
+        <!-- <td><a href="read/{{board.id}}">{{ board.title }}</a></td> -->
+        <td><a href="read/{{order.id}}">{{ order.order_date}}</a></td>
+        <td>{{ order.order_text }}</td>
+        <td>{{ order.price }}</td>
+        <td>{{ order.address }}</td>
+      </tr>
+      {%endfor%}
+    </table>
+    <a href="write/">글쓰기</a>
+    <form action="search_order/" method="POST">
+      {% csrf_token %}
+      <input type="radio" name="condition" value = "all">완전일치</input>
+      <input type="radio" name="condition" value = "part">부분일치</input>
+      <input type="text" name="searchOrder" />
+      <input type="submit" value="검색" />
+    </form>
+  </body>
+</html>

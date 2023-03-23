@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>주문하기</h1>
+    <form action="../write/" method="POST">
+      {% csrf_token %}
+      <table>
+        <tr>
+          <th>상품값</th>
+          <td><input type="text" name="price" /></td>
+        </tr>
+        <tr>
+          <th>주소</th>
+          <td><input type="text" name="address" /></td>
+        </tr>
+        <tr>
+          <th>주문내용</th>
+          <td>
+            <textarea name="order_text" id="" cols="30" rows="10"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2"></th>
+          <td><input type="submit" value="글쓰기" /></td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <table border="1">
+      <tr>
+        <th>작성자ID : {{order.id}}</th>
+        <th>날짜 : {{order.order_date}}</th>
+        <th>주소 : {{order.address}}</th>
+        <th>상품값 : {{order.price}}</th>
+      </tr>
+      <tr>
+        <th colspan="3" rowspan="3">주문내용 : {{order.order_text}}</th>
+        <th>
+          <a href="../../update/{{order.id}}">수정</a>
+          <a href="../../delete/{{order.id}}">삭제</a>
+        </th>
+      </tr>
+    </table>
+  </body>
+</html>
