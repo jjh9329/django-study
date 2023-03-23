@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>게시판</title>
+    {% load static %}
+    <link rel="stylesheet" href='{% static "base.css" %}' />
+  </head>
+  <body>
+    <h1>게시판</h1>
+    <table>
+      <th>#</th>
+      <th>제목</th>
+      <th>글쓴이</th>
+      <th>작성일</th>
+      <th>조회수</th>
+      <!-- 리스트 내용 반복 -->
+      {% for board in board_list%}
+      <tr>
+        <td>{{ board.id }}</td>
+        <td><a href="read/{{board.id}}">{{ board.title }}</a></td>
+        <td>{{ board.writer }}</td>
+        <td>{{ board.input_date }}</td>
+        <td>{{ board.view_count }}</td>
+      </tr>
+      {%endfor%}
+    </table>
+    <a href="write/">글쓰기</a>
+  </body>
+</html>

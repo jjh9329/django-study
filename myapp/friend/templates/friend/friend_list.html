@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!--  static file 불러오기 load static -->
+    {% load static %}
+    <link rel="stylesheet" href='{% static "style.css" %}'/>
+  </head>
+  <body>
+    <h1>친구목록</h1>
+    <!-- {{fList}}<br>
+    {% for friend in fList %} 이름 : {{ friend.friend_name}}</br> 나이 :
+    {{friend.friend_age}}</br> 비고 : {{ friend.friend_bigo}} </br>{% endfor %} -->
+    <table>
+      <tr>
+        <th>번호</th>
+        <th>이름</th>
+        <th>나이</th>
+        <th>소개</th>
+        <th>수정/삭제</th>
+      </tr>
+      {% for friend in fList %}
+      <tbody>
+        <td>{{friend.id}}</td>
+        <td>{{friend.friend_name}}</td>
+        <td>{{friend.friend_age}}</td>
+        <td>{{friend.friend_bigo}}</td>
+        <td>
+          <a href ="../update_friend/{{friend.id}}">수정</a>
+          <a href="../delete_friend/{{friend.id}}">삭제</a>
+        </td>
+      </tbody>
+      {% endfor %}
+    </table>
+    
+    <form action="search_friend/" method="POST">
+      {% csrf_token %}
+      <input type="radio" name="condition" value = "all">완전일치</input>
+      <input type="radio" name="condition" value = "part">부분일치</input>
+      <input type="text" name="searchName" />
+      <input type="submit" value="검색" />
+    </form>
+    <!-- <form action="delete_friend/" method="post">
+      {% csrf_token %}
+      <input type="text" name="delete_name" />
+      <input type="submit" value="삭제" />
+    </form> -->
+  </body>
+</html>

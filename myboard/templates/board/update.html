@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>글정보수정</title>
+    {% load static %}
+    <link rel="stylesheet" href='{% static "base.css" %}' />
+  </head>
+  <body>
+    <h1>글정보수정</h1>
+    <form action="../../update/{{board.id}}/" method="post">
+      {% csrf_token %} 제목 :
+      <input type="text" name="board_title" value="{{board.title}}" /><br />
+      작성자 :<input
+        type="text"
+        name="board_writer"
+        value="{{board.writer}}"
+      /><br />
+      내용 :<input type="text" name="board_content" value="{{board.content}}" />
+      <input type="submit" value="수정" />
+    </form>
+    <!-- <table border="1">
+      <tr>
+        <th>작성자ID : {{board.id}}</th>
+        <th>제목 : {{board.title}}</th>
+        <th>작성자 : {{board.writer}}</th>
+        <th>조회수 : {{board.view_count}}</th>
+      </tr>
+      <tr>
+        <th colspan="3">날짜 : {{board.input_date}}</th>
+        <th>
+          <form action="" method="post">
+            {% csrf_token %}
+            <input type="text" name="" />
+          </form>
+          <a href="../update/{{board.id}}">수정</a>
+        </th>
+      </tr>
+      <tr>
+        <td colspan="4" rowspan="3">{{board.content}}</td>
+      </tr>
+    </table> -->
+    <!-- creat용 폼 -->
+    <!-- <h1>CREATE FRIEND</h1>
+    <form action="../create_friend/" method="post">
+      {% csrf_token %}
+      이름 : <input type="text" name="friend_name" /> <br />
+      나이 : <input type="text" name="friend_age" /> <br />
+      친구소개 : <textarea cols="50" rows="3" name="friend_bigo" /></textarea> <br />
+      <input type="submit" value="등록" />
+    </form> -->
+  </body>
+</html>
