@@ -31,6 +31,7 @@
       {% csrf_token %}
       <input type="radio" name="condition" value = "all">완전일치</input>
       <input type="radio" name="condition" value = "part">부분일치</input>
+      <input type="radio" name="condition" value = "front">전방일치</input>
       <input type="text" name="searchOrder" />
       <input type="submit" value="검색" />
     </form>

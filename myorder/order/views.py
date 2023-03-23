@@ -73,6 +73,8 @@ def search_order(request):
     order_list = []
     if condition == 'all':
         order_list = Order.objects.filter(order_text= search_order)
+    elif condition == 'front':
+        order_list = Order.objects.filter(order_text__startswith= search_order)
     else:
         order_list = Order.objects.filter(order_text__contains = search_order)
     context = {
