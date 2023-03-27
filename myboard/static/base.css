@@ -6,10 +6,15 @@ td {
   border-collapse: collapse;
 }
 
+.current_page {
+  color: red;
+}
+
 a {
+  color: black;
   text-decoration: none;
 }
 
 a:hover {
-  color: limegreen;
+  color: blueviolet;
 }

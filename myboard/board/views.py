@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 from django.template import loader
+from django.core.paginator import Paginator
 from .models import Board
 
 # Create your views here.
@@ -8,12 +9,48 @@ from .models import Board
 def index(request):
     
     print('index() 실행')
-    board_list = Board.objects.all().order_by('-id')
+    result = None # 필터링된 리스트
     
-    context = {
-        'board_list' : board_list
-    }
-    
+    context = {}
+    #request.GET : GET방식으로 보낸 데이터들을 딕셔너리 타입으로 저장
+    #print(request.GET)
+
+    # 검색 조건과 검색 키워드가 있어야 필터링 실행
+    if 'searchType' in request.GET and 'searchWord' in request.GET:
+
+        search_type = request.GET['searchType'] #GET안의 문자열은
+        search_word = request.GET['searchWord'] #THML의 name속성
+
+        print("search_Type : {},search_word : {}".format(search_type,search_word))
+
+       # match : Java의 switch랑 비슷함
+        match search_type:
+            case 'title':
+              result = Board.objects.filter(title__contains = search_word)
+            case 'writer':
+              result = Board.objects.filter(writer__contains = search_word)
+            case 'content':
+              result = Board.objects.filter(content__contains = search_word)
+
+        context['searchType'] = search_type
+        context['searchWord'] = search_word
+
+    else : # QueryDict에 검색 조건과 키워드가 없을때
+      result = Board.objects.all()
+
+    result = result.order_by('-id')
+
+    #페이징 넣기
+    #Paginaotr(목록,목록에 보여줄 개수)
+    paginaotor = Paginator(result,10)
+
+    # Paginator 클래스를 이용해서 자른 목록의 단위에서
+    # 몇번째 단위를 보여줄 것인지 정한다
+    page_obj = paginaotor.get_page(request.GET.get('page'))
+
+    #context['board_list'] = result
+    context['page_obj'] = page_obj
+
     return render(request, 'board/index.html', context)
 
 def read(request,id):

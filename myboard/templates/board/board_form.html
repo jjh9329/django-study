@@ -1,18 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    {% load_static %}
-    <link rel="stylesheet" href='{% static "base.css" %}' />
-    <!-- {% load static %}
-    <link rel="stylesheet" href='{% static "style.css" %}' /> -->
-  </head>
-  <body>
+{# common/bases.html을 상속받겟음 #}
+{% extends 'common/base.html' %}
+{% block title  %}[글쓰기] {% endblock title%}
+{% block body %}
     <h1>글쓰기</h1>
-    <form action="../write/" method="POST">
+    <form action="{%url 'write'%}" method="POST">
       {% csrf_token %}
       <table>
         <tr>
@@ -38,5 +29,4 @@
         </tr>
       </table>
     </form>
-  </body>
-</html>
+{% endblock body%}

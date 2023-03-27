@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'board.apps.BoardConfig',
+    'common.apps.CommonConfig',
 ]
 
 MIDDLEWARE = [
@@ -78,8 +79,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            #mysql db설정을 할때 불러올 파일 경로
-            'read_default_file':str(BASE_DIR/'db.cnf')
+            # mysql db설정을 할때 불러올 파일 경로
+            'read_default_file': str(BASE_DIR/'db.cnf')
         }
     }
 }
@@ -130,3 +131,9 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 로그인 성공했을때 리다이렉트 할 주소
+LOGIN_REDIRECT_URL = '/'
+
+# 로그아웃 성공했을때 리다이렉트 할 주소
+LOGOUT_REDIRECT_URL = '/'
