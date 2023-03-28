@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.core.paginator import Paginator
@@ -138,6 +138,7 @@ def delete(request, id):
     # 글 작성자의 id 와 접속한 사람의 id 가 같을때
     if board.author.username == request.user.username:
         board.delete()
+        return redirect('common:index')
     # 다를때
     else:
         return HttpResponseRedirect('/board/')
