@@ -21,14 +21,15 @@
         <th colspan="3">날짜 : {{board.input_date}}</th>
 
         <td>
-        {% comment %} {% if board.author.unsername == user.username%} {% endcomment %}
+        {% if board.author.username == user.username%}
           <a href="{% url 'board:update' board.id %}">수정</a> &nbsp;
           <a href="{% url 'board:delete' board.id %}">삭제</a>
-        {% comment %} {% endif%} {% endcomment %}
+        {% endif%}
         </td>
       </tr>
       <tr>
         <td colspan="7" rowspan="4">{{board.content}}</td>
       </tr>
     </table>
+    <a href="{% url 'board:index' %}">목록으로</a>
 {% endblock body%}
