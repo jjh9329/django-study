@@ -22,12 +22,12 @@ def index(request):
     if 'searchType' in request.GET and 'searchWord' in request.GET:
 
         search_type = request.GET['searchType']  # GET안의 문자열은
-        search_word = request.GET['searchWord']  # THML의 name속성
+        search_word = request.GET['searchWord']  # HTML의 name속성
 
         print("search_Type : {},search_word : {}".format(
             search_type, search_word))
 
-       # match : Java의 switch랑 비슷함
+        # match : Java의 switch랑 비슷함
         match search_type:
             case 'title':
                 result = Board.objects.filter(title__contains=search_word)
@@ -40,7 +40,7 @@ def index(request):
         context['searchWord'] = search_word
     else:  # QueryDict에 검색 조건과 키워드가 없을때
         result = Board.objects.all()
-
+    # board에 id역순으로 정렬
     result = result.order_by('-id')
 
     # 페이징 넣기
@@ -77,7 +77,6 @@ def home(request):
 
 @login_required(login_url='common:login')
 def write(request):
-    # TODO 내가 리펙토링 적용할 부분
     if request.method == 'GET':
         return render(request, 'board/board_form.html')
     else:
@@ -85,6 +84,14 @@ def write(request):
         content = request.POST['content']
         author = request.user  # 요청에 들어있는 User객체
         print(request.user)
+
+        Board.objects.create(
+            title=title,
+            author=author,  # user 객체저장
+            content=content
+        )
+
+        return redirect('/board/')
 
         # session_writer = request.session.get('writer')
         # if not session_writer:
@@ -101,13 +108,6 @@ def write(request):
         # board.save()  # db에 insert
 
         # 모델.objects.create(값)
-        Board.objects.create(
-            title=title,
-            author=author,  # user 객체저장
-            content=content
-        )
-
-        return redirect('/board/')
 
 
 @login_required(login_url='common:login')

@@ -90,6 +90,8 @@
   <br />
 
   <!-- 페이징2 가지고있는 페이지의 번호 다 보여주기 -->
+  <!-- 페이지 for문써서 페이지네이터 의 페이지 범위 만큼 페이지를 화면에 표시
+        각 페이지 번호에 a 태그로 ?page=page_number로 전송-->
   {% for page_number in page_obj.paginator.page_range %}
   <a href="?page={{page_number}}"> {{page_number}} </a> &nbsp;
   {% endfor %}<br>
