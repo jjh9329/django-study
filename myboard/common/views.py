@@ -81,16 +81,15 @@ def delete(request):
     return redirect('common:index', request)
 
 
-# def update(request):
+def update(request):
+    if request.method == "GET":
+        # CustomChangeForminstatnc) 보내면 장고가 제공하는 기본으로 보냄
+        form = CustomChangeForm()
+        return (request, 'common/update.html', {'form': form})
+    else:  # POST
+        form = CustomChangeForm(request.POST, instance=request.user)
 
-#     if request.method == "POST":
-#         form = CustomChangeForm(request.POST, instance=request.user)
-
-#         if form.is_valid():
-#             form.save()
-#             return redirect('common:index')
-#     else:
-#         # CustomChangeForminstatnc) 보내면 장고가 제공하는 기본으로 보냄
-#         form = CustomChangeForm()
-
-#     return (request, 'common/update.html', {'form': form})
+        if form.is_valid():
+            form.save()
+            return redirect('common:index')
+    return redirect('common:index')
