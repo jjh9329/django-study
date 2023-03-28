@@ -7,13 +7,14 @@
   <title>Document</title>
 </head>
 <body>
+  <div>
   <form action = "{% url 'common:update' %}" method= "post">
     {% csrf_token %}
   <table>
     <tr>
       <th>성</th>
       <td>
-        <input type="text" name="frist_name" value ="{{user.first_name}}">
+        <input type="text" name="first_name" value ="{{user.first_name}}">
       </td>
       <th>이름</th>
       <td>
@@ -26,5 +27,6 @@
     </tr>
     <input type="submit" value = "정보수정">
   </table>
+</div>
 </body>
 </html>

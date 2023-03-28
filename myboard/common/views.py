@@ -82,10 +82,14 @@ def delete(request):
 
 
 def update(request):
+    # 비회원일때 가드
+    if not request.user.is_authenticated:
+        return redirect('common:login')
+
     if request.method == "GET":
         # CustomChangeForminstatnc) 보내면 장고가 제공하는 기본으로 보냄
         form = CustomChangeForm()
-        return (request, 'common/update.html', {'form': form})
+        return render(request, 'common/update.html', {'form': form})
     else:  # POST
         form = CustomChangeForm(request.POST, instance=request.user)
 
