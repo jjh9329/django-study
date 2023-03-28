@@ -8,7 +8,7 @@ app_name = 'board'
 urlpatterns = [
     path('', views.index, name='index'),
     # 해당하는 주소가 입력된다면~
-    path('read/<int:id>/', views.read, name='detail'),
+    path('<int:id>/', views.read, name='read'),
     # 수정 주소
     path('<int:id>/update/', views.update, name='update'),
     path('write/', views.write, name='write'),

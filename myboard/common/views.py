@@ -70,12 +70,15 @@ def signup_custom(request):
     return render(request, 'common/signup.html', {'form': form})
 
 
-# def delete(request):
-#     if request.user.is_authenticated:
-#         # user 정보 삭제
-#         request.user.delete()
-#         # render나 redirect의 파라미터로 app_name:url_name작성 가능
-#         return redirect('common:login', request)
+@login_required(login_url='common:login')
+def delete(request):
+    # 비회원일때 가드
+    if not request.user.is_authenticated:
+        return redirect('common:login')
+    # user 정보 삭제
+    request.user.delete()
+    # render나 redirect의 파라미터로 app_name:url_name작성 가능
+    return redirect('common:index', request)
 
 
 # def update(request):

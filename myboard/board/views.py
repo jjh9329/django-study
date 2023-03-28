@@ -72,11 +72,12 @@ def read(request, id):
 
 
 def home(request):
-    return HttpResponseRedirect('/board/')
+    return redirect('/board/')
 
 
 @login_required(login_url='common:login')
 def write(request):
+    # TODO 내가 리펙토링 적용할 부분
     if request.method == 'GET':
         return render(request, 'board/board_form.html')
     else:
@@ -106,17 +107,18 @@ def write(request):
             content=content
         )
 
-        return HttpResponseRedirect('/board/')
+        return redirect('/board/')
 
 
 @login_required(login_url='common:login')
 def update(request, id):
     board = Board.objects.get(id=id)
-
     # 글쓴이와 현재 접속한 사용자의 username이 다르면 목록으로 리다이렉트
-    if board.author.username != request.user.username:
-        return HttpResponseRedirect('/board/')
+    # 유효성 검사
 
+    if board.author.username != request.user.username:
+        return redirect('common:login')
+    # 실제 로직이 도는 코드
     if request.method == 'GET':
         context = {
             'board': board
@@ -127,18 +129,16 @@ def update(request, id):
         board.title = request.POST['board_title']
 
         board.save()
-        return HttpResponseRedirect('../../read/'+str(id))
+        return redirect('board:read', board.id)
 
 
 @login_required(login_url='common:login')
 def delete(request, id):
     # 해당객체를 가져옴
     board = Board.objects.get(id=id)
+    # 글 작성자의 id 와 접속한 사람의 id 가 다를때
+    if board.author.username != request.user.username:
+        return redirect('common:login')
 
-    # 글 작성자의 id 와 접속한 사람의 id 가 같을때
-    if board.author.username == request.user.username:
-        board.delete()
-        return redirect('common:index')
-    # 다를때
-    else:
-        return HttpResponseRedirect('/board/')
+    board.delete()
+    return redirect('board:index')

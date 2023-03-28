@@ -7,13 +7,12 @@ from . import views as common_view
 app_name = 'common'
 
 urlpatterns = [
+    # common
     path('', common_view.index, name='index'),
+    path('signup/', common_view.signup_custom, name='signup'),
+    path('delete/', common_view.delete, name='delete'),
+    # path('update/', common_view.update, name='update')
+    # Auth
     path('login/', auth_view.LoginView.as_view(template_name='common/login.html'), name='login'),
     path('logout/', auth_view.LogoutView.as_view(), name='logout'),
-    # path('signup/', common_view.signup),
-    # 회원가입
-    path('signup/', common_view.signup_custom, name='signup'),
-    # 회원 삭제
-    # path('delete/', common_view.delete(), name='delete'),
-    # path('update/', common_view.update, name='update')
 ]
