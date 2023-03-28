@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from board.views import home
+# from board.views import home
 urlpatterns = [
     path('', include('common.urls')),
     # path('rul',실행할 기능)

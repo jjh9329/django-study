@@ -2,15 +2,13 @@
 {% block title  %}글정보 수정 {% endblock title%}
 {% block body %}
     <h1>글정보수정</h1>
-    <form action="../../update/{{board.id}}/" method="post">
-      {% csrf_token %} 제목 :
-      <input type="text" name="board_title" value="{{board.title}}" /><br />
-      작성자 :<input
-        type="text"
-        name="board_writer"
-        value="{{board.writer}}"
-      /><br />
-      내용 :<input type="text" name="board_content" value="{{board.content}}" />
+    <form action="{% url 'board:update' board.id %}" method="post">
+      {% csrf_token %} 
+      <span>제목 :</span>
+      <input type="text" name="board_title" value="{{board.title}}" />
+      <br />
+      <span>내용 :</span>
+      <input type="text" name="board_content" value="{{board.content}}" />
       <input type="submit" value="수정" />
     </form>
     <!-- <table border="1">

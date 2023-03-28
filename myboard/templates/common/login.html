@@ -5,10 +5,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  
 </head>
 <body>
-  <form action="../login/" method = "post">
+  <form action="{% url 'common:login' %}" method = "post">
     {% csrf_token %}
+    {% comment %} 로그인이 성공후 이동하 url {% endcomment %}
+    {% comment %} 
+      hidden 태그 next의 value로 next를 사용하면 
+      주소의 쿼리스트링에 있던 ?next주소로 이동
+    {% endcomment %}
+    <input type="hidden" name ="next" value"/board/">
     <table>
       <tr>
         <th>아이디</th>

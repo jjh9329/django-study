@@ -5,6 +5,15 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>게시판</title>
+  <script>
+    function confirmDelete(){
+      let c = confirm('정말 삭제하시겠어요>')
+
+      if(c){
+        location.href = '/delete/'
+      }
+    }
+  </script>
 </head>
 <body>
   <h1>안녕하세요</h1>
@@ -17,19 +26,29 @@
     {% endif%}
   </h2>
   <ul>
+    <li>
+      <a href="{% url 'board:index'%}">게시판으로 가기</a>
+    </li>
     {% if not user.is_authenticated%}
       <li>
-        <a href="signup/">회원가입</a>
+        <a href="{% url 'common:signup' %}">회원가입</a>
       </li>
       <li>
-        <a href="login/"> 로그인</a>
+        <a href="{% url 'common:login' %}"> 로그인</a>
       </li>
     {% elif user.is_authenticated%} 
       <li>
-        <a href="logout/">로그아웃</a>
+        <a href="{% url 'common:logout' %}">로그아웃</a>
       </li>
+      <li>
+        <a href="#" onclick = "javascript:confirmDelete()">회원정보 삭제</a>
+      </li> 
+      {% comment %} <li>
+        <a href="{% url 'common:update' %}">회원정보수정</a>
+      </li> {% endcomment %}
       {% endif %}
-    <li>게시판으로 가기</li>
+   
+    
   </ul>
 </body>
 </html>
