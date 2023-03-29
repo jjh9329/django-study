@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from .models import Board
+from .models import Board,Reply
 
 # Create your views here.
 # views.py의 함수에 들어있는 request 파라미터 : 요청객체
@@ -59,14 +59,15 @@ def index(request):
 def read(request, id):
     print(id)
     board = Board.objects.get(id=id)
-
+    #reply_list = Reply.objects.filter(board_obj=id).order_by('-id')
     # board.view_count = board.view_count+1
     board.view_count += 1
 
     board.save()
 
     context = {
-        'board': board
+        'board': board,
+        #'replyList' : reply_list
     }
     return render(request, 'board/read.html', context)
 
@@ -142,3 +143,17 @@ def delete(request, id):
 
     board.delete()
     return redirect('board:index')
+
+def write_reply(request,id):
+    print(request.POST)
+
+    user = request.user
+    reply_text = request.POST['replyText']#화면에서 넘어오는 textarea name
+
+    Reply.objects.create(
+        user= user,
+        reply_content = reply_text,
+        board_obj = Board.objects.get(id=id)
+    )
+
+    return HttpResponseRedirect('/board/' + str(id))

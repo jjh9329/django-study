@@ -14,4 +14,5 @@ urlpatterns = [
     path('write/', views.write, name='write'),
     # 삭제 주소
     path('<int:id>/delete/', views.delete, name='delete'),
+    path('<int:id>/write_reply/',views.write_reply,name = 'write_reply'),
 ]

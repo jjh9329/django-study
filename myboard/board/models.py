@@ -34,3 +34,6 @@ class Reply(models.Model):
     reply_content = models.TextField(null=False, blank=False)
     # 작성시간
     input_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.reply_content

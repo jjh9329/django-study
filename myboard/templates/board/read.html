@@ -26,10 +26,33 @@
           <a href="{% url 'board:delete' board.id %}">삭제</a>
         {% endif%}
         </td>
+
       </tr>
       <tr>
         <td colspan="7" rowspan="4">{{board.content}}</td>
       </tr>
     </table>
+    <div id = "replyArea">
+      <!-- 댓글 목록 표시할곳-->
+      <div id = "replyList">
+        {#board 객체 뿐만 아니라 board와 fk로 엮인 객체는#}
+        {#board.모델이름_set으로 가져올 수 있다#}
+        {% if board.reply_set%}
+          {% for reply in board.reply_set.all %}
+            {{reply}}<br/>
+          {% endfor %}
+        {% else %}
+          <p>등록된 댓글이 없습니다</p>
+        {% endif%}
+      </div>
+      <!-- 댓글 목록 표시할곳-->
+      <div id ="replyForm">
+        <form action="{% url 'board:write_reply' board.id %}" method ="POST">
+          {% csrf_token %}
+          <textarea name="replyText" id="" cols="30" rows="10"></textarea>
+          <input type="submit" value="댓글쓰기">
+        </form>
+      </div>
+    </div>
     <a href="{% url 'board:index' %}">목록으로</a>
 {% endblock body%}
