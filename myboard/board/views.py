@@ -172,8 +172,14 @@ def delete_reply(request,id,rid):
     #Reply.objects.get(id=rid).delete()
     return HttpResponseRedirect('/board/' + str(id))
 
-def update_reply(request,id,rid):
-    print(request.GET)
+def update_reply(request,id):
 
-    print(f'id: {id} rid: {rid}')
-    pass
+    if request.method =='GET':
+        rid = request.GET['rid']
+        board= Board.objects.get(id = id)
+        context ={
+            'update' :'update',
+            'board' : board, #id 에 해당하는 Board 객체
+            'reply' : board.reply_set.get(id = rid) #rid에 해당하다는 reply객체
+        }
+    return render(request, 'board/read.html',context)

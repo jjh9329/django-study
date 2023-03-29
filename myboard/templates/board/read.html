@@ -54,11 +54,20 @@
       </div>
       <!-- 댓글 목록 표시할곳-->
       <div id ="replyForm">
+        {% if not update  %} <!-- context에 update 대한 값을 찾지 못했을때-->
         <form action="{% url 'board:write_reply' board.id %}" method ="POST">
           {% csrf_token %}
-          <textarea name="replyText" id="" cols="30" rows="10"></textarea>
+          <textarea name="replyText"> {{reply.reply_content}}</textarea>
           <input type="submit" value="댓글쓰기">
         </form>
+        {% else%} <!-- context에 update가 있을때-->
+        <form action="{% url 'board:update_reply' board.id %}" method ="POST">
+          {% csrf_token %}
+          <input type="hidden" name="rid" value="{{reply.id}}">
+          <textarea name="replyText"> {{reply.reply_content}}</textarea>
+          <input type="submit" value="댓글수정">
+        </form>
+        {% endif %}
       </div>
     </div>
     <a href="{% url 'board:index' %}">목록으로</a>
