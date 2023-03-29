@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.template import loader
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+
+from json import loads
+
 from .models import Board,Reply
 
 # Create your views here.
@@ -191,3 +194,16 @@ def update_reply(request,id):
         reply.reply_content = request.POST['replyText']
         reply.save()
         return HttpResponseRedirect('/board/' + str(id))
+
+def call_ajax(request):
+    print('성공했')
+    print(request.POST)
+    #JSON.stringify 하면 아래 표현은 사용할 수 없음
+    # print(request.POST['txt'])
+
+    data = loads(request.body)
+    print('템플릿에서 보낸 데이터',data)
+    print(data['txt'])
+    print(type(data))
+    return JsonResponse({'result':'czczczczczczzczccz'})
+
