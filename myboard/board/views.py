@@ -173,7 +173,8 @@ def delete_reply(request,id,rid):
     return HttpResponseRedirect('/board/' + str(id))
 
 def update_reply(request,id):
-
+    rid =request.GET['rid']
+    print(rid)
     if request.method =='GET':
         rid = request.GET['rid']
         board= Board.objects.get(id = id)
@@ -182,4 +183,11 @@ def update_reply(request,id):
             'board' : board, #id 에 해당하는 Board 객체
             'reply' : board.reply_set.get(id = rid) #rid에 해당하다는 reply객체
         }
-    return render(request, 'board/read.html',context)
+        return render(request, 'board/read.html',context)
+    else :
+        rid = request.POST['rid']
+        reply = Board.objects.get(id = id).reply_set.get(id = rid)
+        #폼에 들어온 새로운 댓글로 저장
+        reply.reply_content = request.POST['replyText']
+        reply.save()
+        return HttpResponseRedirect('/board/' + str(id))
