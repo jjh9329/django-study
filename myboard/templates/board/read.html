@@ -10,6 +10,10 @@
         location.href = '/delete/'
       }
     }
+    function showUpdateForm(param){
+      // .../board/0/update_reply?rid=0
+      location.href = 'update_reply?rid=' + param;
+    }
     </script>
     <table border="1">
       <tr>
@@ -39,7 +43,10 @@
         {#board.모델이름_set으로 가져올 수 있다#}
         {% if board.reply_set%}
           {% for reply in board.reply_set.all %}
-            {{reply}}<br/>
+            {{reply}}&nbsp;&nbsp;&nbsp;
+            <a href="#" onclick = "javascript:showUpdateForm('{{reply.id}}')">수정</a> /
+            <a href="{% url 'board:delete_reply' id=board.id rid=reply.id %}">삭제</a>
+            <br/>
           {% endfor %}
         {% else %}
           <p>등록된 댓글이 없습니다</p>

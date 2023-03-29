@@ -150,10 +150,30 @@ def write_reply(request,id):
     user = request.user
     reply_text = request.POST['replyText']#화면에서 넘어오는 textarea name
 
-    Reply.objects.create(
-        user= user,
+    # Reply.objects.create(
+    #     user= user,
+    #     reply_content = reply_text,
+    #     board_obj = Board.objects.get(id=id)
+    # )
+
+    # queryset을 이용해 봅시다
+    board = Board.objects.get(id=id)
+    board.reply_set.create(
         reply_content = reply_text,
-        board_obj = Board.objects.get(id=id)
+        user= user
     )
 
     return HttpResponseRedirect('/board/' + str(id))
+
+def delete_reply(request,id,rid):
+    print(f'id: {id} rid: {rid}')
+
+    Board.objects.get(id=id).reply_set.get(id =rid).delete()
+    #Reply.objects.get(id=rid).delete()
+    return HttpResponseRedirect('/board/' + str(id))
+
+def update_reply(request,id,rid):
+    print(request.GET)
+
+    print(f'id: {id} rid: {rid}')
+    pass

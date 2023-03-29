@@ -15,4 +15,7 @@ urlpatterns = [
     # 삭제 주소
     path('<int:id>/delete/', views.delete, name='delete'),
     path('<int:id>/write_reply/',views.write_reply,name = 'write_reply'),
+    #댓글삭제 주소(id: 글번호,rid: 댓글번호)
+    path('<int:id>/delete_reply/<int:rid>/',views.delete_reply,name = 'delete_reply'),
+    path('<int:id>/update_reply/<int:rid>',views.update_reply,name='update_reply'),
 ]
