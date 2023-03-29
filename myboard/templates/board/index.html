@@ -2,11 +2,7 @@
 {% extends 'common/base.html' %}
 {% block title  %}[게시판] {% endblock title%}
 {% block body %}
-<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 <script>
-  $(document).ready(function(){
-    //alert('하이');
-  });
   function callFunction(){
     let data = { 'txt' : 'hello'}
     // ajax 통신할때도 csrf_token은 있어야한다

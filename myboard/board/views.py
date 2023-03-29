@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.template import loader
 from django.core.paginator import Paginator
+from django.core import serializers
 from django.contrib.auth.decorators import login_required
 
 from json import loads
@@ -207,3 +208,18 @@ def call_ajax(request):
     print(type(data))
     return JsonResponse({'result':'czczczczczczzczccz'})
 
+def load_reply(request):
+    id = request.POST['id']
+    print(id)
+    #해당하는 board id 에 달려있는 모든 reply가져오기
+    #1번 방법
+    #Reply.objects.filter(board = id)
+    #2번 방법
+
+    reply_list=Board.objects.get(id=id).reply_set.all()
+
+    #QuerySet 그 자체는 js에서 알 수 없는 타입
+    #그래서 JSON타입으로 형변환
+    serialized_list = serializers.serialize("json",reply_list)
+    response = {'response':serialized_list}
+    return JsonResponse(response)

@@ -21,4 +21,5 @@ urlpatterns = [
 
     #AJAX
     path('callAjax/',views.call_ajax),
+    path('load_reply/',views.load_reply),
 ]

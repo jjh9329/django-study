@@ -10,6 +10,26 @@
         location.href = '/delete/'
       }
     }
+    $(document).ready(function(){
+      loadReplyList();
+    });
+    function loadReplyList(){
+      let bNum = '{{board.id}}';
+      console.log(bNum);
+      $.ajax({
+        url:'/board/load_reply/',
+        type:'post',
+        headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
+        data:{'id':bNum},
+        success:function(response){
+          console.log(response)
+          //each 반복문
+          $.each(response,function(i,item){
+            console.log(i + " " + item);
+          });
+        }
+      });
+    }
     function showUpdateForm(param){
       // .../board/0/update_reply?rid=0
       location.href = 'update_reply?rid=' + param;
