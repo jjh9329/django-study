@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone 
+from django.utils import timezone
 # Create your models here.
 # class Board(models.Model):
 #     #번호는 pk 설정 안하면 장고가 자동으로 id 부여해줌

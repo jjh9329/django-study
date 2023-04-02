@@ -1,0 +1,44 @@
+{% extends 'common/base.html' %}
+{% block title  %}글정보 수정 {% endblock title%}
+{% block body %}
+    <h1>글정보수정</h1>
+    <form action="{% url 'note:update' note.id %}" method="post">
+      {% csrf_token %}
+      <span>제목 :</span>
+      <input type="text" name="note_title" value="{{note.title}}" />
+      <br />
+      <span>내용 :</span>
+      <input type="text" name="note_content" value="{{note.content}}" />
+      <input type="submit" value="수정" />
+    </form>
+    {% endblock body%}
+    <!-- <table border="1">
+      <tr>
+        <th>작성자ID : {{note.id}}</th>
+        <th>제목 : {{note.title}}</th>
+        <th>작성자 : {{note.writer}}</th>
+        <th>조회수 : {{note.view_count}}</th>
+      </tr>
+      <tr>
+        <th colspan="3">날짜 : {{note.input_date}}</th>
+        <th>
+          <form action="" method="post">
+            {% csrf_token %}
+            <input type="text" name="" />
+          </form>
+          <a href="../update/{{note.id}}">수정</a>
+        </th>
+      </tr>
+      <tr>
+        <td colspan="4" rowspan="3">{{note.content}}</td>
+      </tr>
+    </table> -->
+    <!-- creat용 폼 -->
+    <!-- <h1>CREATE FRIEND</h1>
+    <form action="../create_friend/" method="post">
+      {% csrf_token %}
+      이름 : <input type="text" name="friend_name" /> <br />
+      나이 : <input type="text" name="friend_age" /> <br />
+      친구소개 : <textarea cols="50" rows="3" name="friend_bigo" /></textarea> <br />
+      <input type="submit" value="등록" />
+    </form> -->

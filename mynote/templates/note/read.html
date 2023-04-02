@@ -14,14 +14,14 @@
       loadReplyList();
     });
     function showUpdateForm(param){
-      // .../board/0/update_reply?rid=0
+      // .../note/0/update_reply?rid=0
       location.href = 'update_reply?rid=' + param;
     }
     function loadReplyList(){
-      let bNum = '{{board.id}}';
+      let bNum = '{{note.id}}';
       console.log(bNum);
       $.ajax({
-        url:'/board/load_reply/',
+        url:'/note/load_reply/',
         type:'post',
         headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
         data:{'id':bNum},
@@ -50,36 +50,36 @@
     </script>
     <table border="1">
       <tr>
-        <th>작성자ID : {{board.id}}</th>
-        <th>제목 : {{board.title}}</th>
-        <th>조회수 : {{board.view_count}}</th>
+        <th>작성자ID : {{note.id}}</th>
+        <th>제목 : {{note.title}}</th>
+        <th>조회수 : {{note.view_count}}</th>
       </tr>
       <tr>
-        <th colspan="3">날짜 : {{board.input_date}}</th>
+        <th colspan="3">날짜 : {{note.input_date}}</th>
 
         <td>
-        {% if board.author.username == user.username%}
-          <a href="{% url 'board:update' board.id %}">수정</a> &nbsp;
-          <a href="{% url 'board:delete' board.id %}">삭제</a>
+        {% if note.author.username == user.username%}
+          <a href="{% url 'note:update' note.id %}">수정</a> &nbsp;
+          <a href="{% url 'note:delete' note.id %}">삭제</a>
         {% endif%}
         </td>
 
       </tr>
       <tr>
-        <td colspan="7" rowspan="4">{{board.content}}</td>
+        <td colspan="7" rowspan="4">{{note.content}}</td>
       </tr>
     </table>
     <div id = "replyArea">
       <!-- 댓글 목록 표시할곳-->
       <div>
-        {#board 객체 뿐만 아니라 board와 fk로 엮인 객체는#}
-        {#board.모델이름_set으로 가져올 수 있다#}
-        {% if board.reply_set%}
-          {% for reply in board.reply_set.all %}
+        {#note 객체 뿐만 아니라 note와 fk로 엮인 객체는#}
+        {#note.모델이름_set으로 가져올 수 있다#}
+        {% if note.reply_set%}
+          {% for reply in note.reply_set.all %}
             {% comment %} {{reply}}&nbsp;&nbsp;&nbsp; {% endcomment %}
             <span id="replyList"></span>
             <a href ="#" onclick = "javascript:showUpdateForm('{{reply.id}}')">수정</a> <span>/</span>
-            <a href="{% url 'board:delete_reply' id=board.id rid=reply.id %}">삭제</a>
+            <a href="{% url 'note:delete_reply' id=note.id rid=reply.id %}">삭제</a>
             <br/>
           {% endfor %}
         {% else %}
@@ -89,13 +89,13 @@
       <!-- 댓글 목록 표시할곳-->
       <div id ="replyForm">
         {% if not update  %} <!-- context에 update 대한 값을 찾지 못했을때-->
-        <form action="{% url 'board:write_reply' board.id %}" method ="POST">
+        <form action="{% url 'note:write_reply' note.id %}" method ="POST">
           {% csrf_token %}
           <textarea name="replyText"> {{reply.reply_content}}</textarea>
           <input type="submit" value="댓글쓰기">
         </form>
         {% else%} <!-- context에 update가 있을때-->
-        <form action="{% url 'board:update_reply' board.id %}" method ="POST">
+        <form action="{% url 'note:update_reply' note.id %}" method ="POST">
           {% csrf_token %}
           <input type="hidden" name="rid" value="{{reply.id}}">
           <textarea name="replyText"> {{reply.reply_content}}</textarea>
@@ -104,5 +104,5 @@
         {% endif %}
       </div>
     </div>
-    <a href="{% url 'board:index' %}">목록으로</a>
+    <a href="{% url 'note:index' %}">목록으로</a>
 {% endblock body%}
