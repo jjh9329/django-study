@@ -11,8 +11,33 @@
       }
     }
     $(document).ready(function(){
+      // 1 수정 폼 숨기기
+      $("#updateForm").hide();
+      // 2 버튼에 이벤트 달기
+      $("#btnWrite").click(function(){
+        writeReply();
+      });
       loadReplyList();
     });
+    function writeReply(){
+      // textarea가 id가 replyTextWrite의 내용val()
+      let replyText = $("#replyTextWrite").val();
+
+      let data = { 'replyText' : replyText }
+
+      $.ajax({
+        url: '{% url "board:write_reply" id=board.id %}',
+        type:"post",//user 정보도 보낼거기 때문에
+        data: JSON.stringify(data),
+        headers:{ 'X-CSRFTOKEN': '{{csrf_token}}'},
+        success:function(result){
+          //console.log(result);
+          // 댓글창 초기화
+          $("#replyTextWrite").val("");
+          loadReplyList();
+        }
+      })
+    }
     function showUpdateForm(param){
       // .../board/0/update_reply?rid=0
       location.href = 'update_reply?rid=' + param;
@@ -27,6 +52,14 @@
           $.each(res.replyList,function(index,item){
             //inputdate에 있는 필요없는 문자열들을 삭제
             let replacedDate = item.inputDate.replace("T"," ").replace("Z","").split(".")[0]
+
+            for (let i = 0; i<replacedDate.length; i++){
+              // replcaedDate의 문자열이 charAt()'-'이라면 '/'로 바꾸겟다(replace)
+              if (replacedDate.charAt(i) === '-'){
+                replacedDate = replacedDate.replace("-","/");
+              }
+            }
+
             str += "<tr>";
             str += "<td>" + item.replyText + "</td>";
             str += "<td>" + item.username + "</td>";
@@ -71,21 +104,17 @@
 
       </div>
       <!-- 댓글 추가 표시할곳-->
+      <!-- ajax로 넣을거기 때문에 form없애고 inputtype submit에서 button으로 바꾼다-->
       <div id ="replyForm">
-        {% if not update  %} <!-- context에 update 대한 값을 찾지 못했을때-->
-        <form action="{% url 'board:write_reply' board.id %}" method ="POST">
-          {% csrf_token %}
-          <textarea name="replyText"> {{reply.reply_content}}</textarea>
-          <input type="submit" value="댓글쓰기">
-        </form>
-        {% else%} <!-- context에 update가 있을때-->
-        <form action="{% url 'board:update_reply' board.id %}" method ="POST">
-          {% csrf_token %}
+        <div id ="writeForm">
+          <textarea name="replyText" id ="replyTextWrite"></textarea>
+          <input type="button" value="댓글쓰기" id = "btnWrite">
+        </div>
+        <div id ="updateForm">
           <input type="hidden" name="rid" value="{{reply.id}}">
-          <textarea name="replyText"> {{reply.reply_content}}</textarea>
-          <input type="submit" value="댓글수정">
-        </form>
-        {% endif %}
+          <textarea name="replyText" id = "replyTextUpdate"></textarea>
+          <input type="button" value="댓글수정" id = "btnUpdate">
+        </div>
       </div>
     </div>
     <a href="{% url 'board:index' %}">목록으로</a>

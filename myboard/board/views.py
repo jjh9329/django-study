@@ -151,8 +151,12 @@ def write_reply(request,id):
     print(request.POST)
 
     user = request.user
-    reply_text = request.POST['replyText']#화면에서 넘어오는 textarea name
+    # 요청의 body를 해석
+    reply = loads(request.body)
 
+    print(reply)
+
+    reply_text = reply['replyText']
     # Reply.objects.create(
     #     user= user,
     #     reply_content = reply_text,
@@ -166,7 +170,8 @@ def write_reply(request,id):
         user= user
     )
 
-    return HttpResponseRedirect('/board/' + str(id))
+    #return HttpResponseRedirect('/board/' + str(id))
+    return JsonResponse({'result': 'success'})
 
 def delete_reply(request,id,rid):
     print(f'id: {id} rid: {rid}')
