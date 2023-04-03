@@ -3,7 +3,7 @@
 {% block title  %}[글쓰기] {% endblock title%}
 {% block body %}
     <h1>글쓰기</h1>
-    <form action="{%url 'board:write'%}" method="POST">
+    <form action="{%url 'board:write'%}" method="POST" enctype = "multipart/form-data">
       {% csrf_token %}
       <!-- 로그인 성공 후 이동할 url-->
       <table>
@@ -17,11 +17,20 @@
           <th>글쓴이</th>
           <td><input type="text" name="writer" /></td>
         </tr> {% endcomment %}
-        {% endif%} 
+        {% endif%}
         <tr>
           <th>내용</th>
           <td>
             <textarea name="content" id="" cols="30" rows="10"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <th>첨부파일</th>
+          <td>
+            현재 첨부파일 :
+            {% if board.original_file_name %} {{board.original_file_name}}
+            {% else %} 없음 {% endif %}
+            <input type="file" name="uploadFile" id="" value = "{{board.original_file_name}}">
           </td>
         </tr>
         <tr>

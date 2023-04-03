@@ -137,3 +137,7 @@ LOGIN_REDIRECT_URL = '/'
 
 # 로그아웃 성공했을때 리다이렉트 할 주소
 LOGOUT_REDIRECT_URL = '/'
+
+#파일 업로드 관련
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = 'media/'

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect,JsonResponse,FileResponse
 from django.template import loader
 from django.core.paginator import Paginator
 from django.core import serializers
@@ -84,18 +84,44 @@ def write(request):
     if request.method == 'GET':
         return render(request, 'board/board_form.html')
     else:
+        print(request.POST)
+        print(request.FILES)
         title = request.POST['title']
         content = request.POST['content']
         author = request.user  # 요청에 들어있는 User객체
         print(request.user)
 
-        Board.objects.create(
+        board = Board(
             title=title,
-            author=author,  # user 객체저장
+            author=author,
             content=content
         )
+        # get 메서드 사용하는 이유
+        # 해당하는 키가 없을때 딕셔너리[키]에서 키를 찾으면 ->KeyError
+        # 딕셔너리.get("키") -> None
+        if request.FILES.get("uploadFile") : # 키가 있다면
+            upload_file = request.FILES["uploadFile"]
+            #요청에 들어있던 첨부파일을 모델에 설정
+            board.attached_file = upload_file
+            board.original_file_name = upload_file.name
+            print(board.attached_file)
+            print(board.original_file_name)
 
+        board.save()
         return redirect('/board/')
+
+
+
+
+
+
+        #db에 insert
+        # Board.objects.create(
+        #     title=title,
+        #     author=author,  # user 객체저장
+        #     content=content
+        # )
+
 
         # session_writer = request.session.get('writer')
         # if not session_writer:
@@ -104,11 +130,6 @@ def write(request):
         # print(session_writer)
 
         # 객체.save()
-        # board = Board(
-        #     title=title,
-        #     writer=writer,
-        #     content=content
-        # )
         # board.save()  # db에 insert
 
         # 모델.objects.create(값)
@@ -116,24 +137,51 @@ def write(request):
 
 @login_required(login_url='common:login')
 def update(request, id):
-    board = Board.objects.get(id=id)
-    # 글쓴이와 현재 접속한 사용자의 username이 다르면 목록으로 리다이렉트
-    # 유효성 검사
+    board = Board.objects.get(id = id)
 
+    #글쓴이와 현재 접속한 사용자의 username이 다르면 목록으로 리다이렉트해줌
     if board.author.username != request.user.username:
-        return redirect('common:login')
-    # 실제 로직이 도는 코드
-    if request.method == 'GET':
-        context = {
-            'board': board
-        }
+        return HttpResponseRedirect('/board/')
+
+    if request.method == "GET":
+        context ={'board' : board }
         return render(request, 'board/update.html', context)
+
     else:
-        board.content = request.POST['board_content']
         board.title = request.POST['board_title']
+        board.content = request.POST['board_content']
+
+        #첨부파일이 있다면
+        if request.FILES.get('uploadFile'):
+            upload_file = request.FILES["uploadFile"]
+            #요청에 들어있던 첨부파일을 모델에 설정
+            board.attached_file = upload_file
+            board.original_file_name = upload_file.name
+        else:  #첨부파일이 없다면
+            board.attached_file = None
+            board.original_file_name = None
 
         board.save()
-        return redirect('board:read', board.id)
+
+    return HttpResponseRedirect('/board/')
+    # board = Board.objects.get(id=id)
+    # # 글쓴이와 현재 접속한 사용자의 username이 다르면 목록으로 리다이렉트
+    # # 유효성 검사
+
+    # if board.author.username != request.user.username:
+    #     return redirect('common:login')
+    # # 실제 로직이 도는 코드
+    # if request.FILES.get('uploadFile'):
+    #     upload_file = request.FILES["uploadFile"]
+    #     board.attached_file = upload_file
+    #     board.original_file_name = upload_file
+    # else:
+    #     board.attached_file = None
+    #     board.original_file_name = None
+
+    #     board.save()
+    #     con
+    #     return redirect('board:read', board.id)
 
 
 @login_required(login_url='common:login')
@@ -173,34 +221,46 @@ def write_reply(request,id):
     #return HttpResponseRedirect('/board/' + str(id))
     return JsonResponse({'result': 'success'})
 
-def delete_reply(request,id,rid):
-    print(f'id: {id} rid: {rid}')
+def delete_reply(request,id):
+    #print(f'id: {id} rid: {rid}')
 
+    #loads(request.body)를 ()로 묶어서 객체로 묶은것(loads(request.body))
+    rid = (loads(request.body))["rid"]
     Board.objects.get(id=id).reply_set.get(id =rid).delete()
     #Reply.objects.get(id=rid).delete()
-    return HttpResponseRedirect('/board/' + str(id))
+    #return HttpResponseRedirect('/board/' + str(id))
+    return JsonResponse({'delete':'success'})
 
 def update_reply(request,id):
 
 
     if request.method =='GET':
         rid = request.GET['rid']
-        board= Board.objects.get(id = id)
+        reply= Board.objects.get(id = id).reply_set.get(id=rid)
+
         context ={
-            'update' :'update',
-            'board' : board, #id 에 해당하는 Board 객체
-            'reply' : board.reply_set.get(id = rid) #rid에 해당하다는 reply객체
+            'id' : reply.id, #id 에 해당하는 Board 객체
+            'replyText' : reply.reply_content, #rid에 해당하다는 reply객체
         }
-        return render(request, 'board/read.html',context)
+
+        print("context는 ---------->",context)
+        #return render(request, 'board/read.html',context)
+        return JsonResponse(context)
     else :
-        rid = request.POST['rid']
-        print("id :",rid)
-        print(">>>>>>>>>>>>>>>>>>>>>>댓글수정누름")
+        # JSON 객체로 보냈기 때문에 requset POST로 못 가져온다
+        # rid = request.POST['rid']
+        #
+        print(request.body)
+        request_body = loads(request.body)
+        rid = request_body["rid"]
+        reply_text =request_body["replyText"]
         reply = Board.objects.get(id = id).reply_set.get(id = rid)
+
         #폼에 들어온 새로운 댓글로 저장
-        reply.reply_content = request.POST['replyText']
+        reply.reply_content =reply_text
         reply.save()
-        return HttpResponseRedirect('/board/' + str(id))
+        #return HttpResponseRedirect('/board/' + str(id))
+        return JsonResponse({'result':'success'})
 
 def call_ajax(request):
     print('성공했')
@@ -245,3 +305,15 @@ def load_reply(request,id):
     context={'replyList':reply_dict_list}
 
     return JsonResponse(context)
+
+
+
+def download(request,id):
+    print("글 번호야야양야--------------------->>>>>>",id)
+    board = Board.objects.get(id = id)
+    attached_file = board.attached_file
+    original_file_name = board.original_file_name
+    # 글 번호에 달려있떤 첨부파일로 파일형식 응답 객체 생성
+    response = FileResponse(attached_file)
+    response["Content-Disposition"] = 'attachment; filename=%s' %original_file_name
+    return response

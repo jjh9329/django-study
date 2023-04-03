@@ -17,8 +17,37 @@
       $("#btnWrite").click(function(){
         writeReply();
       });
+      // 3 수정하기 버튼에 이벤트 달기
+      $("#btnUpdate").click(function(){
+        updateReply();
+      })
+
       loadReplyList();
+
     });
+    // val()은 input의 값을 가져올수 있다
+    function updateReply(){
+      let replyText = $("#replyTextUpdate").val();
+      let rid = $("#rid").val();
+      let data = {
+        'rid':rid,
+        'replyText': replyText
+      }
+      $.ajax({
+        url:'{% url "board:update_reply" id=board.id %}',
+        type:'post',
+        data:JSON.stringify(data),
+        headers:{'X-CSRFTOKEN':'{{csrf_token}}'},
+        success:function(res){
+          console.log(res);
+          $("#replyTextUpdate").val("");
+          $("#updateForm").hide();
+          $("#writeForm").show();
+
+          loadReplyList();
+        }
+      })
+    }
     function writeReply(){
       // textarea가 id가 replyTextWrite의 내용val()
       let replyText = $("#replyTextWrite").val();
@@ -40,8 +69,41 @@
     }
     function showUpdateForm(param){
       // .../board/0/update_reply?rid=0
-      location.href = 'update_reply?rid=' + param;
+      //location.href = 'update_reply?rid=' + param;
+      $("#writeForm").hide();
+      $("#updateForm").show();
+
+      $.ajax({
+        url:'{% url "board:update_reply" id=board.id %}',
+        type:'get',
+        data:{'rid':param},
+        success:function(res){
+          //1. 수정입력창에 댓글내용 ㅇ표시
+          //폼요소.val() = 해당하는 폼요소에 들어있는 값을 가져올 수 있다
+          //폼요소.val(문자열) = 문자열을 해당 폼요소에 지정할수 있다.
+          console.log(res);
+          $("#replyTextUpdate").val(res.replyText);
+          //2. rid라는 id를 가진 hidden 태그에 값 설정
+          $("#rid").val(param);
+        }
+      })
     }
+
+    function deleteReply(param){
+      let data = {'rid' : param};
+
+      $.ajax({
+        url:'{% url "board:delete_reply" id=board.id %}',
+        type:'post',
+        data:JSON.stringify(data),
+        headers:{'X-CSRFTOKEN':'{{csrf_token}}'},
+        success:function(){
+          //댓글 삭제가 완료되면
+          loadReplyList();
+        }
+      })
+    }
+
     function loadReplyList(){
       $.ajax({
         url:'{% url "board:load_reply" id=board.id %}',
@@ -64,7 +126,12 @@
             str += "<td>" + item.replyText + "</td>";
             str += "<td>" + item.username + "</td>";
             str += "<td>" + replacedDate + "</td>";
-            str += "<td>수정삭제</td>";
+            str += "<td>"
+            if('{{ user.username}}' === item.username){
+              str += "<a href= '#' onclick = 'showUpdateForm(" +item.id + ")'>수정</a>";
+              str += "<a href= '#' onclick = 'deleteReply(" +item.id + ")'>삭제</a>";
+            }
+            str += "</td>"
             str += "</tr>";
 
         })
@@ -82,9 +149,17 @@
         <th>작성자ID : {{board.id}}</th>
         <th>제목 : {{board.title}}</th>
         <th>조회수 : {{board.view_count}}</th>
+        {% if board.original_file_name %}
+        <th>첨부파일</th>
+        <td colspan = '3'>
+          <!-- /board/0/download/ -->
+          <a href="{% url 'board:download' id=board.id %}">{{board.original_file_name}}</a>
+        </td>
+      {% endif %}
       </tr>
+
       <tr>
-        <th colspan="3">날짜 : {{board.input_date}}</th>
+        <th colspan="4">날짜 : {{board.input_date}}</th>
 
         <td>
         {% if board.author.username == user.username%}
@@ -97,6 +172,7 @@
       <tr>
         <td colspan="7" rowspan="4">{{board.content}}</td>
       </tr>
+
     </table>
     <div id = "replyArea">
       <!-- 댓글 목록 표시할곳-->
@@ -111,7 +187,7 @@
           <input type="button" value="댓글쓰기" id = "btnWrite">
         </div>
         <div id ="updateForm">
-          <input type="hidden" name="rid" value="{{reply.id}}">
+          <input type="hidden" name="rid" value="" id ="rid" >
           <textarea name="replyText" id = "replyTextUpdate"></textarea>
           <input type="button" value="댓글수정" id = "btnUpdate">
         </div>

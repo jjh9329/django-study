@@ -1,15 +1,38 @@
 {% extends 'common/base.html' %}
 {% block title  %}글정보 수정 {% endblock title%}
 {% block body %}
+    <script>
+      function validateFile(){
+        let file  = document.getElementById("uploadFile");
+        console.log(file.value);
+
+        //첨부파일이 있었는대 수정하면서 없을때
+        if('{{ board.original_file_name }}' !== "" && file.value ==""){
+          let go =confirm("파일이 첨부되지 않았습니다. 계속 하시겠습니까?");
+          if(go == true) {
+            return true;
+          }else {
+            return false;
+          }
+        }
+        return false;
+      }
+    </script>
     <h1>글정보수정</h1>
-    <form action="{% url 'board:update' board.id %}" method="post">
-      {% csrf_token %} 
+    <form action="{% url 'board:update' board.id %}" method="post" enctype= "multipart/form-data" onsubmit = "return validateFile();">
+      {% csrf_token %}
       <span>제목 :</span>
       <input type="text" name="board_title" value="{{board.title}}" />
       <br />
       <span>내용 :</span>
       <input type="text" name="board_content" value="{{board.content}}" />
-      <input type="submit" value="수정" />
+      </br>
+      {% if board.original_file_name %}
+        <input type="file" name="uploadFile" id="uploadFile" value = "{{board.original_file_name}}" value = "{{board.original_file_name}}">
+      {% else %}
+        <input type="file" name = "uploadFile">
+      {% endif %}
+      <input type="submit" value="글쓰기" />
     </form>
     {% endblock body%}
     <!-- <table border="1">

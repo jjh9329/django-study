@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+# 현재 프로젝트의 settings.py
+from django.conf import settings
+from django.conf.urls.static import static
 
 # from board.views import home
 urlpatterns = [
@@ -23,4 +26,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # app/라는 주소가 실행되면 app 폴더의 urls를 참조
     path('board/', include('board.urls')),
-]  # 리스트
+]  + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
