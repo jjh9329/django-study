@@ -18,34 +18,30 @@
       location.href = 'update_reply?rid=' + param;
     }
     function loadReplyList(){
-      let bNum = '{{board.id}}';
-      console.log(bNum);
       $.ajax({
-        url:'/board/load_reply/',
-        type:'post',
-        headers: {'X-CSRFTOKEN':'{{csrf_token}}'},
-        data:{'id':bNum},
-        success:function(response){
-          //parse
-          //each 반복문
-          let replyList = JSON.parse(response["response"]);
-          console.log(replyList);
-          console.log(response);
-          let str = "";
-          $.each(replyList,function(i,item){
-            //
-            let replyContent = item.fields.reply_content;
-            let replyUser = item.fields.user;
-            // 바로바로 화면에 붙이려면 appemd
-            //$("#replyList").append(replyContent + "<br>")
-            str += "<sapn>"+replyUser+"</span>"+"&nbsp"+replyContent;
-            //str += "<br>";
-          })
-          // HTML을 만들어서 한번에 넣으려면 html
-          $("#replyList").html(str);
-        }
-      });
-    }
+        url:'{% url "board:load_reply" id=board.id %}',
+        type:'get',
+        success:function(res){
+          //console.log(res);
+          let str = "<table>";
+          $.each(res.replyList,function(index,item){
+            //inputdate에 있는 필요없는 문자열들을 삭제
+            let replacedDate = item.inputDate.replace("T"," ").replace("Z","").split(".")[0]
+            str += "<tr>";
+            str += "<td>" + item.replyText + "</td>";
+            str += "<td>" + item.username + "</td>";
+            str += "<td>" + replacedDate + "</td>";
+            str += "<td>수정삭제</td>";
+            str += "</tr>";
+
+        })
+        str += "</table>";
+        // id가 replyList인곳을  화면에 표시
+        $("#replyList").html(str);
+      }
+
+    })
+  }
 
     </script>
     <table border="1">
@@ -71,22 +67,10 @@
     </table>
     <div id = "replyArea">
       <!-- 댓글 목록 표시할곳-->
-      <div>
-        {#board 객체 뿐만 아니라 board와 fk로 엮인 객체는#}
-        {#board.모델이름_set으로 가져올 수 있다#}
-        {% if board.reply_set%}
-          {% for reply in board.reply_set.all %}
-            {% comment %} {{reply}}&nbsp;&nbsp;&nbsp; {% endcomment %}
-            <span id="replyList"></span>
-            <a href ="#" onclick = "javascript:showUpdateForm('{{reply.id}}')">수정</a> <span>/</span>
-            <a href="{% url 'board:delete_reply' id=board.id rid=reply.id %}">삭제</a>
-            <br/>
-          {% endfor %}
-        {% else %}
-          <p>등록된 댓글이 없습니다</p>
-        {% endif%}
+      <div id="replyList">
+
       </div>
-      <!-- 댓글 목록 표시할곳-->
+      <!-- 댓글 추가 표시할곳-->
       <div id ="replyForm">
         {% if not update  %} <!-- context에 update 대한 값을 찾지 못했을때-->
         <form action="{% url 'board:write_reply' board.id %}" method ="POST">

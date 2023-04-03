@@ -209,18 +209,34 @@ def call_ajax(request):
     print(type(data))
     return JsonResponse({'result':'czczczczczczzczccz'})
 
-def load_reply(request):
-    id = request.POST['id']
-    print(id)
-    #해당하는 board id 에 달려있는 모든 reply가져오기
-    #1번 방법
-    #Reply.objects.filter(board = id)
-    #2번 방법
+def load_reply(request,id):
+    # id = request.POST['id']
+    # print(id)
+    # #해당하는 board id 에 달려있는 모든 reply가져오기
+    # #1번 방법
+    # #Reply.objects.filter(board = id)
+    # #2번 방법
 
-    reply_list=Board.objects.get(id=id).reply_set.all()
+    # reply_list=Board.objects.get(id=id).reply_set.all()
 
-    #QuerySet 그 자체는 js에서 알 수 없는 타입
-    #그래서 JSON타입으로 형변환
-    serialized_list = serializers.serialize("json",reply_list)
-    response = {'response':serialized_list}
-    return JsonResponse(response)
+    # #QuerySet 그 자체는 js에서 알 수 없는 타입
+    # #그래서 JSON타입으로 형변환
+    # serialized_list = serializers.serialize("json",reply_list)
+    # response = {'response':serialized_list}
+    # return JsonResponse(response)
+
+    reply_list = Board.objects.get(id=id).reply_set.all()
+    # reply_list의 정보를 가지고 dictionary 만들기
+    reply_dict_list = []
+    for reply in reply_list:
+        reply_dict = {
+            'id': reply.id,
+            'username':reply.user.username,
+            'replyText':reply.reply_content,
+            'inputDate':reply.input_date
+        }
+        reply_dict_list.append(reply_dict)
+
+    context={'replyList':reply_dict_list}
+
+    return JsonResponse(context)

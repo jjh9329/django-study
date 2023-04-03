@@ -58,7 +58,7 @@ def index(request):
 def read(request, id):
     #print(id)
     note = Note.objects.get(id=id)
-    #reply_list = Reply.objects.filter(note_obj=id).order_by('-id')
+    reply_list = Reply.objects.filter(note_obj=id).order_by('-id')
     # note.view_count = note.view_count+1
     note.view_count += 1
 
