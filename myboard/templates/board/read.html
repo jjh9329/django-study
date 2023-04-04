@@ -52,6 +52,11 @@
       // textarea가 id가 replyTextWrite의 내용val()
       let replyText = $("#replyTextWrite").val();
 
+      if (replyText.length === 0){
+        alert("댓글 입력 xxxxx");
+        return;
+      }
+
       let data = { 'replyText' : replyText }
 
       $.ajax({
@@ -184,12 +189,12 @@
       <div id ="replyForm">
         <div id ="writeForm">
           <textarea name="replyText" id ="replyTextWrite"></textarea>
-          <input type="button" value="댓글쓰기" id = "btnWrite">
+          <input type="button" value="댓글쓰기" id = "btnWrite" onclick = "return validateReply(this);">
         </div>
         <div id ="updateForm">
           <input type="hidden" name="rid" value="" id ="rid" >
           <textarea name="replyText" id = "replyTextUpdate"></textarea>
-          <input type="button" value="댓글수정" id = "btnUpdate">
+          <input type="button" value="댓글수정" id = "btnUpdate" onclick = "return validateReply(this);">
         </div>
       </div>
     </div>

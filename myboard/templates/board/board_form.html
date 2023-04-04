@@ -3,13 +3,13 @@
 {% block title  %}[글쓰기] {% endblock title%}
 {% block body %}
     <h1>글쓰기</h1>
-    <form action="{%url 'board:write'%}" method="POST" enctype = "multipart/form-data">
+    <form action="{%url 'board:write'%}" method="POST" enctype = "multipart/form-data" name="writeForm" onsubmit="return abcd();">
       {% csrf_token %}
       <!-- 로그인 성공 후 이동할 url-->
       <table>
         <tr>
-          <th>제목</th>
-          <td><input type="text" name="title" /></td>
+          <th >제목</th>
+          <td><input type="text" name="title" value="{{board.title}}"id="title"/></td>
         </tr>
         <!-- session에 writer가 없으면 해당 tr 표시  -->
         {% if not request.session.writer %}
@@ -21,7 +21,7 @@
         <tr>
           <th>내용</th>
           <td>
-            <textarea name="content" id="" cols="30" rows="10"></textarea>
+            <textarea name="content" id="content" cols="30" rows="10"></textarea>
           </td>
         </tr>
         <tr>

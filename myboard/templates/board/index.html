@@ -99,16 +99,18 @@
   </form>
   <!-- 페이징 -->
   {% if page_obj.has_previous %}
-  <a href="?page=1"> &laquo;처음 페이지로</a>
-  <a href="?page={{page_obj.previous_page_number}}">이전 페이지로</a>
+  <!-- {% url 'board:index'%} 은 board/index/라고 볼수 있다-->
+  <!-- GET의 parameter(쿼리스트링)은 url의 구성요소와-->
+  <a href="{% url 'board:index'%}?page=1"> &laquo;처음 페이지로</a>
+  <a href="{% url 'board:index'%}?page={{page_obj.previous_page_number}}">이전 페이지로</a>
   {% endif %}
 
   <!-- Paginator의 number 현재 페이지 번호 -->
   <!-- num_pages는 전체 페이지수 -->
   Page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
   {% if page_obj.has_next %}
-  <a href="?page={{page_obj.next_page_number}}">다음 페이지로</a>
-  <a href="?page={{page_obj.paginator.num_pages}}">마지막 페이지로 &raquo;</a>
+  <a href="{% url 'board:index'%}?page={{page_obj.next_page_number}}">다음 페이지로</a>
+  <a href="{% url 'board:index'%}?page={{page_obj.paginator.num_pages}}">마지막 페이지로 &raquo;</a>
   {% endif %}
   <br />
 
