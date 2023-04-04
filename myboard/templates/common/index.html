@@ -36,19 +36,22 @@
       <li>
         <a href="{% url 'common:login' %}"> 로그인</a>
       </li>
-    {% elif user.is_authenticated%} 
+    {% elif user.is_authenticated%}
       <li>
         <a href="{% url 'common:logout' %}">로그아웃</a>
       </li>
       <li>
         <button href="#" onclick = "javascript:confirmDelete()">회원정보 삭제</button>
-      </li> 
+      </li>
       <li>
         <a href="{% url 'common:update' %}">회원정보수정</a>
-      </li> 
+      </li>
       {% endif %}
-   
-    
+      <li>
+        <a href="/board/cbv/">게시판(CBV)</a>
+      </li>
+
+
   </ul>
 </body>
 </html>
