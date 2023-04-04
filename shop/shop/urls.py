@@ -1,4 +1,4 @@
-"""myboard URL Configuration
+"""shop URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -14,16 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-# 현재 프로젝트의 settings.py
-from django.conf import settings
-from django.conf.urls.static import static
+from django.urls import path,include
 
-# from board.views import home
 urlpatterns = [
-    path('', include('common.urls')),
-    # path('url',실행할 기능)
     path('admin/', admin.site.urls),
-    # app/라는 주소가 실행되면 app 폴더의 urls를 참조
-    path('board/', include('board.urls')),
-]  + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+    path('', include('item.urls')),
+]

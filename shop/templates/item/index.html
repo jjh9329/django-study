@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>샾</title>
+</head>
+<body>
+  <table border='1'>
+    <tr>
+      <th>#</th>
+      <th>코드</th>
+      <th>이름</th>
+      <th>수량</th>
+
+    </tr>
+    {% for i in iList %}
+    <tr>
+      <td>{{i.id}}</td>
+      <td>
+        <a href="{% url 'item:read' i.id %}">
+        {{i.item_code}}
+        </a>
+      </td>
+      <td>{{i.item_name}}</td>
+      <td>{{i.item_count}}</td>
+    </tr>
+    {% endfor%}
+  </table>
+  </br>
+  <a href="{%url 'item:write'%}">상품만들기</a>
+</body>
+</html>

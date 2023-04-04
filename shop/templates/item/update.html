@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>글정보수정</h1>
+    <form action="{% url 'item:update' item.id %}" method="post">
+      {% csrf_token %}
+      <span>코드 :</span>
+      <input type="text" name="item_code" value="{{item.item_code}}" />
+      <br />
+      <span>이름 :</span>
+      <input type="text" name="item_name" value="{{item.item_name}}" />
+      </br>
+      <span>수량 :</span>
+      <input type="text" name="item_count" value="{{item.item_count}}" />
+      </br>
+      <input type="submit" value="글쓰기" />
+    </form>
+</body>
+</html>

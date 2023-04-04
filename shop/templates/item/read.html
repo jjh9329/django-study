@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function(){
+    // 1 수정 폼 숨기기
+    $("#updateForm").hide();
+    // 2 버튼에 이벤트 달기
+    $("#btnWrite").click(function(){
+      writeReply();
+    });
+    // 3 수정하기 버튼에 이벤트 달기
+    $("#btnUpdate").click(function(){
+      updateReply();
+    })
+  });
+  </script>
+</head>
+<body>
+  <table border="1">
+    <tr>
+      <th>ID : {{item.id}}</th>
+      <th>코드 : {{item.item_code}}</th>
+      <th>이름 : {{item.item_name}}</th>
+      <th>수량 : {{item.item_count}}</th>
+    </tr>
+
+    <tr>
+
+      <td>
+        {% comment %} <a href="{% url 'board:update' board.id %}">수정</a> &nbsp; {% endcomment %}
+        <a href="{% url 'item:update' item.id %}">수정</a> &nbsp;
+        <a href="{% url 'item:delete' item.id %}">삭제</a>
+        {% comment %} <a href="{% url 'board:delete' board.id %}">삭제</a> {% endcomment %}
+      </td>
+
+    </tr>
+
+
+  </table>
+</body>
+</html>
