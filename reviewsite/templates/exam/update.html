@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #content{
+      width: 96%;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+  <script>
+    function callFunction(){
+      if(confirm("정말 삭제하시겠습니까?") == true){
+        return true;
+      }else{
+        return false;
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h1>영화 정보 등록</h1>
+  <form action="{% url 'exam:update' movie.id %}" method="POST" name="writeForm" onsubmit="return abcd();">
+    {% csrf_token %}
+    <table border='1'>
+      <tr>
+        <td>
+          <select name="genreType" id="">
+            <option value="코미디">코미디</option>
+            <option value="액션">액션</option>
+            <option value="애니메이션">애니메이션</option>
+          </select>
+        </td>
+        <td>
+          영화 제목: <input type="text" name="title" value = {{movie.movie_name}} />
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          <textarea name="content" id="content" rows='5'>{{movie.movie_summary}}</textarea>
+        </th>
+      </tr>
+      <tr>
+          <th colspan="2" >
+            <input type="submit" value="수정하기" />
+            <button onclick="return callFunction();"><a href="{% url 'exam:delete' movie.id %}">삭제하기</a></button>
+          </th>
+      </tr>
+    </table>
+  </form>
+</body>
+</html>

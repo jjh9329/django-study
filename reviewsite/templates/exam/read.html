@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+      <p>[{{movie.movie_name}}]에 대한 정보입니다.</p>
+      <p>장르 : {{movie.genre}}</p>
+      <p>영화 설명 : {{movie.movie_summary}}</p>
+      <p>
+        <a href="{% url 'exam:update' movie.id%}">영화 정보 수정</a> &nbsp;
+        {% comment %} <a href="{% url 'board:update' board.id %}">수정</a> &nbsp; {% endcomment %}
+      </p>
+      <p>관객 평점</p>
+      <p>[{{movie.movie_name}}] 관객 리뷰</p>
+</body>
+</html>

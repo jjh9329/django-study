@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>영화 리뷰 게시판</title>
+</head>
+<body>
+  <h1>[영화 리뷰 게시판]</h1>
+  <span>정렬 </span>
+  <a href="{% url 'exam:index'%}">최신순으로 보기</a>
+  {% if page_obj %}
+  <table border='1'>
+    <tr>
+      <th>번호</th>
+      <th>장르</th>
+      <th>제목</th>
+      <th>리뷰 수</th>
+
+    </tr>
+    {% for movie in page_obj %}
+    <tr>
+      <td>{{movie.id}}</td>
+      <td>
+        <a href="{% url 'exam:read' movie.id %}">
+          {{movie.genre}}
+        </a>
+      </td>
+      <td>{{movie.movie_name}}</td>
+      <td>리뷰 모델 만들면 개수 해야됌</td>
+    </tr>
+    {% endfor%}
+  </table>
+  {% else%}
+  <p>게시글이 존재하지 않습니다</p>
+  {% endif %}
+  <span>내가 찾는 영화가 없다면 ? </span>
+  <a href="{% url 'exam:write' %}">영화 등록하기</a>
+</body>
+</html>
